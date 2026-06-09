@@ -7,48 +7,66 @@ import Footer from '../../components/Footer.astro';
 const blogs = (await getCollection('blogs')).sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
+
+function getReadingTime(body: string): string {
+  const words = body.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / 200);
+  return `${minutes} min read`;
+}
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog - Pavan MP</title>
+    <title>Blog | Pavan Patil</title>
+    <meta name="description" content="Writing on robotics, autonomous systems, ROS2, and field engineering." />
     <link rel="icon" type="image/png" href="/assets/logo.png" />
+    <meta property="og:title" content="Blog | Pavan Patil" />
+    <meta property="og:description" content="Writing on robotics, autonomous systems, ROS2, and field engineering." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pavanmp140102.github.io/blog" />
+    <script data-goatcounter="https://pavanmp1402.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   </head>
-  <body class="bg-slate-900 text-slate-100">
+  <body>
     <Navbar />
-    
-    <main class="min-h-screen px-6 py-20 md:px-12 lg:px-20 max-w-7xl mx-auto">
-      <h1 class="text-4xl md:text-5xl font-bold mb-2 text-slate-100">Blog</h1>
-      <p class="text-slate-400 mb-12">Thoughts, tutorials, and projects</p>
+
+    <main class="mx-auto min-h-screen max-w-5xl px-6 py-20">
+      <h1 class="text-4xl font-bold text-lightest-slate md:text-5xl">Blog</h1>
+      <p class="mt-2 mb-12 text-slate">Thoughts, tutorials, and projects</p>
 
       {blogs.length === 0 ? (
-        <p class="text-slate-400 text-lg">No blog posts yet. Check back soon!</p>
+        <p class="text-light-slate">No blog posts yet. Check back soon!</p>
       ) : (
         <div class="space-y-6">
           {blogs.map((post) => (
-            <article class="border-l-4 border-cyan-400 pl-6 py-4 hover:bg-slate-800/50 transition-colors">
-              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
-                <h2 class="text-2xl font-semibold text-slate-100">
-                  <a href={`/blog/${post.slug}`} class="hover:text-cyan-400 transition-colors">
-                    {post.data.title}
-                  </a>
-                </h2>
-                <time class="text-slate-400 text-sm">
+            <article class="border-l-4 border-accent pl-6 py-4 transition hover:bg-light-navy/50">
+              <div class="flex flex-wrap items-center gap-3 mb-1">
+                <time class="font-mono text-xs text-accent">
                   {new Date(post.data.date).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
                   })}
                 </time>
+                <span class="font-mono text-xs text-slate">·</span>
+                <span class="font-mono text-xs text-slate">{getReadingTime(post.body)}</span>
+                <span class="font-mono text-xs text-slate">·</span>
+                <span class="font-mono text-xs text-slate">
+                  <span class="goatcounter-count" data-path={`/blog/${post.slug}`}></span> views
+                </span>
               </div>
-              <p class="text-slate-300 mb-3">{post.data.description}</p>
+              <h2 class="text-2xl font-semibold text-lightest-slate mb-2">
+                <a href={`/blog/${post.slug}`} class="transition hover:text-accent">
+                  {post.data.title}
+                </a>
+              </h2>
+              <p class="text-light-slate mb-3">{post.data.description}</p>
               {post.data.tags && post.data.tags.length > 0 && (
                 <div class="flex flex-wrap gap-2">
                   {post.data.tags.map((tag) => (
-                    <span class="text-xs bg-slate-700 text-cyan-300 px-3 py-1 rounded-full">
+                    <span class="inline-block rounded bg-lightest-navy px-3 py-1 font-mono text-xs text-accent">
                       #{tag}
                     </span>
                   ))}

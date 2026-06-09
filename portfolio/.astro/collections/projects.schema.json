@@ -19,6 +19,13 @@
         "image": {
           "type": "string"
         },
+        "featured": {
+          "type": "boolean",
+          "default": false
+        },
+        "liveUrl": {
+          "type": "string"
+        },
         "$schema": {
           "type": "string"
         }

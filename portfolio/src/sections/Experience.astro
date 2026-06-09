@@ -2,22 +2,135 @@
 import { getCollection } from 'astro:content';
 import SectionTitle from '../components/SectionTitle.astro';
 
-const experiences = (await getCollection('experiences')).sort(
+const allExperiences = (await getCollection('experiences')).sort(
   (a, b) => new Date(b.data.startDate).getTime() - new Date(a.data.startDate).getTime()
 );
+
+// Pre-render markdown bodies
+const rendered = await Promise.all(
+  allExperiences.map(async (exp) => {
+    const { Content } = await exp.render();
+    return { exp, Content };
+  })
+);
+
+// Group by company, preserving order of first appearance
+const companies: string[] = [];
+const grouped: Record<string, typeof rendered> = {};
+for (const item of rendered) {
+  const company = item.exp.data.company;
+  if (!grouped[company]) {
+    companies.push(company);
+    grouped[company] = [];
+  }
+  grouped[company].push(item);
+}
+
+const tabLabel = (name: string) => {
+  if (name.includes('KLE') || name.includes('C.A.S.E')) return 'KLE / C.A.S.E';
+  if (name.includes('AICTE'))                             return 'AICTE';
+  return name;
+};
 ---
 
 <section id="experience" class="mx-auto max-w-5xl px-6 py-24">
-  <SectionTitle index="02" title="Experience" />
-  <div class="space-y-6 border-l border-lightest-navy pl-6">
-    {experiences.map((item) => (
-      <article class="group rounded bg-light-navy p-5 shadow-glow transition hover:-translate-y-1">
-        <h3 class="text-xl font-semibold text-lightest-slate">
-          {item.data.role} <span class="text-accent">@ {item.data.company}</span>
-        </h3>
-        <p class="mt-1 font-mono text-sm text-slate">{item.data.duration}</p>
-        <p class="mt-3 text-light-slate">{item.data.description}</p>
-      </article>
-    ))}
+  <SectionTitle index="02" title="Where I've Worked" />
+
+  <div class="flex flex-col md:flex-row">
+
+    {/* Company tab list */}
+    <ul class="flex shrink-0 flex-row overflow-x-auto border-b border-lightest-navy md:flex-col md:border-b-0 md:border-l md:border-lightest-navy md:w-44">
+      {companies.map((company, i) => (
+        <li>
+          <button
+            class:list={[
+              'company-tab w-full px-5 py-3 text-left font-mono text-sm whitespace-nowrap md:whitespace-normal transition-all',
+              i === 0 ? 'active' : '',
+            ]}
+            data-company={company}
+          >
+            {tabLabel(company)}
+          </button>
+        </li>
+      ))}
+    </ul>
+
+    {/* Experience panels */}
+    <div class="mt-6 flex-1 md:mt-0 md:pl-10">
+      {companies.map((company, i) => (
+        <div
+          class:list={['company-panel', i !== 0 ? 'hidden' : '']}
+          data-company={company}
+        >
+          <div class="space-y-10">
+            {grouped[company].map(({ exp, Content }) => (
+              <div>
+                <h3 class="text-lg font-semibold text-lightest-slate">
+                  {exp.data.role}
+                  <span class="text-accent"> @ {exp.data.company}</span>
+                </h3>
+                <p class="mt-1 font-mono text-xs text-slate">{exp.data.duration}</p>
+                {exp.data.description && (
+                  <p class="mt-4 text-light-slate leading-relaxed">{exp.data.description}</p>
+                )}
+                <div class="exp-body mt-4">
+                  <Content />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
   </div>
 </section>
+
+<script>
+  const tabs   = document.querySelectorAll<HTMLButtonElement>('.company-tab');
+  const panels = document.querySelectorAll<HTMLElement>('.company-panel');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.company;
+      tabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+      panels.forEach((panel) => {
+        panel.classList.toggle('hidden', panel.dataset.company !== target);
+      });
+    });
+  });
+</script>
+
+<style>
+  .company-tab {
+    @apply text-slate hover:text-accent hover:bg-light-navy/50;
+    border-bottom: 2px solid transparent;
+  }
+  @media (min-width: 768px) {
+    .company-tab {
+      border-bottom: none;
+      border-left: 2px solid transparent;
+      margin-left: -1px;
+    }
+  }
+  .company-tab.active {
+    @apply text-accent bg-light-navy/40;
+    border-color: theme('colors.accent');
+  }
+
+  /* Bullet point styling for markdown body */
+  .exp-body :global(ul) {
+    @apply space-y-2;
+  }
+  .exp-body :global(ul li) {
+    @apply relative pl-5 text-light-slate leading-relaxed;
+  }
+  .exp-body :global(ul li::before) {
+    content: '▹';
+    @apply absolute left-0 text-accent;
+  }
+  .exp-body :global(p) {
+    @apply text-light-slate leading-relaxed;
+  }
+</style>

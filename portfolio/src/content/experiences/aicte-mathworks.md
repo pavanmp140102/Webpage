@@ -1,7 +1,7 @@
 ---
-role: "Virtual Internship"
-company: "AICTE and Mathworks"
-duration: "May 2023 – Sep 2023"
+role: "Virtual Intern — AI & Signal Processing"
+company: "AICTE and MathWorks"
+duration: "May 2023 – Aug 2023"
 startDate: "2023-05-01"
-description: "Developed proficiency in machine learning algorithms, deep learning techniques, and neural network architectures using industry-standard tools like MATLAB and Simulink provided by Mathworks."
+description: "Completed the MathWorks Virtual Internship Program (MVIP) — a structured 4-month curriculum covering MATLAB, image processing, signal processing, machine learning, and deep learning. Applied spectral analysis and filtering techniques on signal data, performed image segmentation and batch classification, and trained deep neural networks for image classification using MATLAB. Earned joint AICTE–MathWorks completion certificates across all five courses."
 ---

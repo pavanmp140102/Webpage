@@ -8,7 +8,7 @@ const blogs = (await getCollection('blogs')).sort(
 ---
 
 <section id="blog" class="mx-auto max-w-5xl px-6 py-24">
-  <SectionTitle index="04" title="Blog" />
+  <SectionTitle index="04" title="What I've Been Up To" />
   <div class="space-y-4">
     {blogs.length === 0 ? (
       <p class="text-light-slate">More posts coming soon...</p>
@@ -25,7 +25,7 @@ const blogs = (await getCollection('blogs')).sort(
               {post.data.tags && post.data.tags.length > 0 && (
                 <div class="mt-3 flex flex-wrap gap-2">
                   {post.data.tags.map((tag) => (
-                    <span class="inline-block rounded bg-lighter-navy px-2 py-1 font-mono text-xs text-accent">
+                    <span class="inline-block rounded bg-lightest-navy px-2 py-1 font-mono text-xs text-accent">
                       {tag}
                     </span>
                   ))}

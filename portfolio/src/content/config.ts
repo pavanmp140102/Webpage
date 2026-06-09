@@ -7,7 +7,7 @@ const experienceCollection = defineCollection({
     company: z.string(),
     duration: z.string(),
     startDate: z.string(),
-    description: z.string(),
+    description: z.string().optional(),
   }),
 });
 
@@ -19,6 +19,8 @@ const projectCollection = defineCollection({
     tech: z.string(),
     github: z.string(),
     image: z.string(),
+    featured: z.boolean().optional().default(false),
+    liveUrl: z.string().optional(),
   }),
 });
 

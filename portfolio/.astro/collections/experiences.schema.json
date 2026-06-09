@@ -27,8 +27,7 @@
         "role",
         "company",
         "duration",
-        "startDate",
-        "description"
+        "startDate"
       ],
       "additionalProperties": false
     }

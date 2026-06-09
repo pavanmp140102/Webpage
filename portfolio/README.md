@@ -77,6 +77,12 @@ description: "Brief description of your role and accomplishments."
 
 ### Adding a Project
 
+Projects are displayed in two formats depending on the `featured` flag:
+
+**Featured projects** (`featured: true`) — rendered as large showcase cards with a hero image, alternating left/right layout, and an overlay effect. Require an `image` field pointing to a file in `public/assets/project-images/`.
+
+**Other/Noteworthy projects** (`featured: false`) — rendered as small cards in a 3-column grid with a folder icon. No image is shown; the `image` field is ignored and can be omitted.
+
 Create a new file in `src/content/projects/` (e.g., `robot-navigation.md`):
 
 ```yaml
@@ -85,11 +91,13 @@ title: "Autonomous Navigation Robot"
 description: "Detailed description of the project and its impact."
 tech: "ROS2 | Python | LiDAR"
 github: "https://github.com/yourusername/repo-name"
-image: "/assets/project-images/robot.svg"
+featured: true                                      # false = card grid, no image needed
+image: "/assets/project-images/robot.png"           # only required when featured: true
+# liveUrl: "https://example.com"                    # optional for both types
 ---
 ```
 
-**Image path:** Store SVG/PNG files in `public/assets/project-images/` and reference them in the `image` field.
+**Image path:** Store PNG/SVG files in `public/assets/project-images/` and reference them in the `image` field. Only needed for featured projects.
 
 ### Adding a Blog Post
 

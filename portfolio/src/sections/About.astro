@@ -1,28 +1,69 @@
 ---
 import SectionTitle from '../components/SectionTitle.astro';
 
-const skills = ['ROS2', 'C++', 'Python', 'LiDAR', 'SLAM', 'Embedded Systems', 'Computer Vision'];
+const skillGroups = [
+  { label: 'Core',               skills: ['ROS 2', 'C++', 'Python', 'MATLAB / Simulink'] },
+  { label: 'Perception',         skills: ['LiDAR', 'mmWave Radar', 'Computer Vision', 'Sensor Fusion', 'Object Detection & Tracking'] },
+  { label: 'Localization',       skills: ['SLAM', 'GNSS / IMU', 'HD Maps'] },
+  { label: 'Planning & Control', skills: ['Motion Planning', 'MPC', 'PID Control', 'Drive-by-Wire'] },
+  { label: 'Simulation',         skills: ['CARLA', 'Gazebo'] },
+  { label: 'Automotive',         skills: ['CAN Bus', 'ISO 26262'] },
+  { label: 'AI / ML',            skills: ['PyTorch', 'TensorRT / ONNX'] },
+  { label: 'Infrastructure',     skills: ['Embedded Linux', 'Docker', 'Git'] },
+];
 ---
 
 <section id="about" class="mx-auto max-w-5xl px-6 py-24">
-  <SectionTitle index="01" title="About" />
+  <SectionTitle index="01" title="Who I Am" />
+
   <div class="grid gap-10 md:grid-cols-[2fr_1fr] md:items-start">
     <div class="space-y-4 text-light-slate">
       <p>
-        I’m a robotics engineer focused on designing autonomous systems that can perceive, plan,
-        and act in uncertain environments.
+        I'm a robotics engineer specializing in autonomous systems for the automotive domain —
+        building software that lets vehicles perceive, localize, plan, and act in complex
+        real-world environments.
       </p>
       <p>
-        My work combines robust software architecture with practical field testing, from sensor
-        fusion and SLAM pipelines to embedded control loops and deployment-ready tooling.
+        My work spans the full autonomy stack. On the perception side, I integrate mmWave radar,
+        3D LiDAR, multi-camera rigs, GNSS, and IMUs into robust sensor fusion pipelines that
+        hold up under degraded conditions and edge cases.
       </p>
-      <p>Technologies I work with most often:</p>
-      <ul class="grid grid-cols-2 gap-y-2 font-mono text-sm text-lightest-slate sm:grid-cols-3">
-        {skills.map((skill) => <li class="before:mr-2 before:text-accent before:content-['▹']">{skill}</li>)}
-      </ul>
+      <p>
+        On the planning and control side, I design motion planning modules and drive-by-wire
+        inspired control systems that bridge the gap between simulation and physical deployment.
+        I care as much about making a system maintainable and testable as I do about making it
+        work.
+      </p>
     </div>
-    <div class="mx-auto w-full max-w-56 rounded bg-light-navy p-2 shadow-glow">
-      <img src="/assets/profile.svg" alt="Pavan Patil profile illustration" class="rounded object-cover" />
+    <div class="group relative mx-auto w-full max-w-56">
+      <!-- decorative offset border -->
+      <div class="absolute -bottom-3 -right-3 h-full w-full rounded border-2 border-accent transition duration-300 group-hover:-bottom-4 group-hover:-right-4"></div>
+      <!-- image + teal overlay -->
+      <div class="relative overflow-hidden rounded">
+        <img
+          src="/assets/profile.png"
+          alt="Pavan Patil"
+          class="w-full object-cover grayscale transition duration-500 group-hover:grayscale-0"
+          loading="lazy"
+        />
+        <div class="absolute inset-0 bg-accent/30 mix-blend-multiply transition duration-500 group-hover:opacity-0"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10">
+    <p class="mb-6 text-light-slate">Technologies I work with most often:</p>
+    <div class="grid grid-cols-2 gap-6 font-mono text-sm sm:grid-cols-4">
+      {skillGroups.map((group) => (
+        <div>
+          <p class="mb-2 text-xs uppercase tracking-widest text-accent">{group.label}</p>
+          <ul class="space-y-1">
+            {group.skills.map((skill) => (
+              <li class="text-lightest-slate before:mr-2 before:text-accent before:content-['▹']">{skill}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   </div>
 </section>

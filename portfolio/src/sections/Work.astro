@@ -1,25 +1,119 @@
 ---
 import { getCollection } from 'astro:content';
 import SectionTitle from '../components/SectionTitle.astro';
+import IconFolder from '../components/IconFolder.astro';
+import IconGithub from '../components/IconGithub.astro';
 
-const projects = await getCollection('projects');
+const allProjects = await getCollection('projects');
+const featured  = allProjects.filter((p) => p.data.featured);
+const others    = allProjects.filter((p) => !p.data.featured);
 ---
 
 <section id="work" class="mx-auto max-w-6xl px-6 py-24">
-  <SectionTitle index="03" title="Work" />
-  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-    {projects.map((project) => (
-      <article class="group overflow-hidden rounded bg-light-navy shadow-glow transition hover:-translate-y-2 hover:shadow-xl">
-        <img src={project.data.image} alt={project.data.title} class="h-44 w-full object-cover opacity-85 transition group-hover:opacity-100" />
-        <div class="space-y-3 p-5">
-          <h3 class="text-xl font-semibold text-lightest-slate">{project.data.title}</h3>
-          <p class="text-light-slate">{project.data.description}</p>
-          <p class="font-mono text-sm text-slate">{project.data.tech}</p>
-          <a href={project.data.github} target="_blank" rel="noreferrer" class="font-mono text-sm text-accent hover:underline">
-            GitHub →
-          </a>
-        </div>
-      </article>
-    ))}
-  </div>
+  <SectionTitle index="03" title="Some Things I've Built" />
+
+  {/* ── Featured Projects ─────────────────────────────── */}
+  {featured.length > 0 && (
+    <div class="mb-28 space-y-32">
+      {featured.map((project, i) => {
+        const isEven = i % 2 === 0;
+        return (
+          <article class="group relative grid items-center gap-4 md:grid-cols-12">
+
+            {/* Image */}
+            <div class:list={[
+              'relative overflow-hidden rounded md:col-span-7',
+              isEven ? 'md:col-start-1 md:row-start-1' : 'md:col-start-6 md:row-start-1',
+            ]}>
+              <img
+                src={project.data.image}
+                alt={project.data.title}
+                class="h-72 w-full object-cover brightness-50 grayscale transition duration-500 group-hover:brightness-100 group-hover:grayscale-0"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-accent/30 mix-blend-multiply transition duration-500 group-hover:opacity-0 rounded"></div>
+            </div>
+
+            {/* Text card — overlaps image with negative margin */}
+            <div class:list={[
+              'relative z-10 md:col-span-6',
+              isEven
+                ? 'md:col-start-7 md:row-start-1 md:text-right'
+                : 'md:col-start-1 md:row-start-1 md:text-left',
+            ]}>
+              <p class="mb-2 font-mono text-xs text-accent">Featured Project</p>
+              <h3 class="text-2xl font-bold text-lightest-slate">{project.data.title}</h3>
+              <div class="mt-4 rounded bg-lightest-navy p-6 shadow-glow">
+                <p class="text-light-slate leading-relaxed">{project.data.description}</p>
+              </div>
+              <p class:list={[
+                'mt-4 font-mono text-sm text-slate',
+                isEven ? 'md:text-right' : 'md:text-left',
+              ]}>
+                {project.data.tech}
+              </p>
+              <div class:list={[
+                'mt-4 flex gap-4 text-lightest-slate',
+                isEven ? 'md:justify-end' : 'md:justify-start',
+              ]}>
+                <a href={project.data.github} target="_blank" rel="noreferrer"
+                   class="hover:-translate-y-1 hover:text-accent transition-all" aria-label="GitHub">
+                  <IconGithub />
+                </a>
+                {project.data.liveUrl && (
+                  <a href={project.data.liveUrl} target="_blank" rel="noreferrer"
+                     class="hover:-translate-y-1 hover:text-accent transition-all" aria-label="Live">
+                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+
+          </article>
+        );
+      })}
+    </div>
+  )}
+
+  {/* ── Other Noteworthy Projects ─────────────────────── */}
+  {others.length > 0 && (
+    <div>
+      <h3 class="mb-2 text-center text-2xl font-bold text-lightest-slate">Other Noteworthy Projects</h3>
+      <p class="mb-10 text-center font-mono text-sm text-accent">view the archive</p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {others.map((project) => (
+          <article class="group flex flex-col rounded bg-light-navy p-7 shadow-glow transition duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <div class="mb-6 flex items-center justify-between">
+              <span class="text-accent"><IconFolder /></span>
+              <div class="flex gap-4 text-slate">
+                <a href={project.data.github} target="_blank" rel="noreferrer"
+                   class="hover:text-accent transition-colors" aria-label="GitHub">
+                  <IconGithub />
+                </a>
+                {project.data.liveUrl && (
+                  <a href={project.data.liveUrl} target="_blank" rel="noreferrer"
+                     class="hover:text-accent transition-colors" aria-label="Live">
+                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+            <h4 class="mb-3 text-lg font-semibold text-lightest-slate group-hover:text-accent transition-colors">
+              {project.data.title}
+            </h4>
+            <p class="flex-1 text-sm text-light-slate leading-relaxed">{project.data.description}</p>
+            <p class="mt-6 font-mono text-xs text-slate">{project.data.tech}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  )}
 </section>

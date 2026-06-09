@@ -1,7 +1,8 @@
 ---
 title: "Autonomous Navigational Robot"
-description: "Integrated GPS RTK and LiDAR sensors for advanced navigation and obstacle detection, leveraging ROS for real-time communication between mechanical subsystems."
-tech: "MATLAB | ROS | LiDAR"
-github: "https://github.com/hppmp"
-image: "/assets/project-images/autonomous-rescue-robot.svg"
+description: "A sponsored research project building a full-stack autonomous robot — from MBSE-driven architecture using MATLAB System Composer, to GPS RTK + LiDAR sensor integration, PID-based motor and BMS control, and sensor fusion with path planning for obstacle-aware navigation in real environments."
+tech: "MATLAB / Simulink | ROS | GPS RTK | LiDAR | PID | SolidWorks | Ansys"
+github: "https://github.com/ProjectHub-2023/Sponsored-Research-Project-Repo.git"
+image: "/assets/project-images/autonomous-nav-robot.png"
+featured: true
 ---
